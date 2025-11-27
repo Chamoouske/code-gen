@@ -1,6 +1,9 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type SupportedLangages struct {
 	langages map[string]Converter
@@ -13,7 +16,7 @@ func GetSupportedLangages() *SupportedLangages {
 }
 
 func (sl *SupportedLangages) AddSupport(newLang string, converter Converter) bool {
-	sl.langages[newLang] = converter
+	sl.langages[strings.ToLower(newLang)] = converter
 	return true
 }
 
