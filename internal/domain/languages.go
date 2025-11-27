@@ -9,10 +9,8 @@ type SupportedLangages struct {
 	langages map[string]Converter
 }
 
-var support = &SupportedLangages{langages: make(map[string]Converter)}
-
-func GetSupportedLangages() *SupportedLangages {
-	return support
+func GetNewSupportedLangages() SupportedLangages {
+	return SupportedLangages{langages: make(map[string]Converter)}
 }
 
 func (sl *SupportedLangages) AddSupport(newLang string, converter Converter) bool {
