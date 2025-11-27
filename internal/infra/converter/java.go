@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -16,6 +17,12 @@ import (
 var log = logger.GetLogger("JavaConverter")
 
 type JavaConverter struct{}
+
+type JavaFile struct {
+	Name    string
+	Fields  []graphql.FieldInfo
+	Package string
+}
 
 func NewJavaConverter() *JavaConverter {
 	return &JavaConverter{}
@@ -68,9 +75,10 @@ func (jc *JavaConverter) Convert(pathFile string, outputPath string) error {
 			continue
 		}
 
-		ti := graphql.TypeInfo{
-			Name:   name,
-			Fields: []graphql.FieldInfo{},
+		ti := JavaFile{
+			Name:    name,
+			Fields:  []graphql.FieldInfo{},
+			Package: definePackageNameBasedInOutputDir(outputPath),
 		}
 		for _, f := range def.Fields {
 			fi := graphql.FieldInfo{
@@ -102,14 +110,12 @@ public class {{.Name}} {
     private {{.Type}} {{.FieldName}};
 {{- end}}
 
-    // getters & setters
 {{- range .Fields}}
 
-    public {{.Type}} get{{.MethodName}}() {
+    public {{.Type}} get{{.FieldName}}() {
         return this.{{.FieldName}};
     }
-
-    public void set{{.MethodName}}({{.Type}} {{.FieldName}}) {
+    public void set{{.FieldName}}({{.Type}} {{.FieldName}}) {
         this.{{.FieldName}} = {{.FieldName}};
     }
 {{- end}}
@@ -143,4 +149,18 @@ func gqlTypeToJava(t *ast.Type) string {
 	default:
 		return base
 	}
+}
+
+func definePackageNameBasedInOutputDir(s string) string {
+	re := regexp.MustCompile(`[^A-Za-z]+`)
+	parts := re.Split(s, -1)
+
+	out := parts[:0]
+	for _, p := range parts {
+		if p != "" {
+			out = append(out, p)
+		}
+	}
+
+	return strings.Join(out, ".")
 }
