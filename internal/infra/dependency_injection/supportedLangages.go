@@ -6,6 +6,7 @@ var sl domain.SupportedLangages
 
 func init() {
 	sl = domain.GetNewSupportedLangages()
+	addConverters(sl)
 }
 
 func GetSupportedLangages() *domain.SupportedLangages {
