@@ -11,3 +11,7 @@ func init() {
 func GetSupportedLangages() *domain.SupportedLangages {
 	return &sl
 }
+
+func AddSupport(lang string, converter domain.Converter) {
+	sl.AddSupport(lang, converter)
+}
