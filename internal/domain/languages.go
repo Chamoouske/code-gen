@@ -17,12 +17,12 @@ func (sl *SupportedLangages) AddSupport(newLang string, converter Converter) boo
 	return true
 }
 
-func (sl *SupportedLangages) GetConverterForLangage(lang string) (*Converter, error) {
+func (sl *SupportedLangages) GetConverterForLangage(lang string) (Converter, error) {
 	var converter = sl.langages[lang]
 
 	if converter == nil {
 		return nil, fmt.Errorf("Converter must not be exists")
 	}
 
-	return &converter, nil
+	return converter, nil
 }
