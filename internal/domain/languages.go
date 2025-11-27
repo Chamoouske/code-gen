@@ -1,5 +1,7 @@
 package domain
 
+import "fmt"
+
 type SupportedLangages struct {
 	langages map[string]Converter
 }
@@ -13,4 +15,14 @@ func GetSupportedLangages() *SupportedLangages {
 func (sl *SupportedLangages) AddSupport(newLang string, converter Converter) bool {
 	sl.langages[newLang] = converter
 	return true
+}
+
+func (sl *SupportedLangages) GetConverterForLangage(lang string) (*Converter, error) {
+	var converter = sl.langages[lang]
+
+	if converter == nil {
+		return nil, fmt.Errorf("Converter must not be exists")
+	}
+
+	return &converter, nil
 }
