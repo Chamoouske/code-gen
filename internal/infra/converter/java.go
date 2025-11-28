@@ -158,7 +158,7 @@ func definePackageNameBasedInOutputDir(s string) string {
 	out := parts[:0]
 	for _, p := range parts {
 		if p != "" {
-			out = append(out, p)
+			out = append(out, strings.ToLower(p))
 		}
 	}
 
